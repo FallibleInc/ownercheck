@@ -8,11 +8,11 @@ from conf import CHECK_TYPES, CNAME_VALUE, META_TAG_NAME
 db.init()
 
 
-class InvalidVerificationTypeException(Exception):
+class InvalidVerificationType(Exception):
     pass
 
 
-class NoVerificationCodeExistsException(Exception):
+class NoVerificationCodeExists(Exception):
     pass
 
 
@@ -28,6 +28,8 @@ def _verify_cname(subdomain, expected_value=CNAME_VALUE):
             return True
     except dns.resolver.NoAnswer:
         return False
+    except dns.resolver.Timeout:
+        return False
     return False
 
 
@@ -41,6 +43,8 @@ def _verify_txt_record(domain, expected_value):
             if record == expected_value:
                 return True
     except dns.resolver.NoAnswer:
+        return False
+    except dns.resolver.Timeout:
         return False
     return False
 
@@ -84,11 +88,11 @@ def verify_domain(domain, check_type):
     code = db.get_code(domain, check_type)
 
     if check_type not in CHECK_TYPES:
-        raise InvalidVerificationTypeException(
+        raise InvalidVerificationType(
             '%s not in %s' % (check_type, str(CHECK_TYPES)))
 
     if code is None:
-        raise NoVerificationCodeExistsException(
+        raise NoVerificationCodeExists(
             'No verification code found for %s'
             % str((domain, check_type)))
 

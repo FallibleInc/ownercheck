@@ -58,6 +58,6 @@ def remove_code(domain, check_type):
     c.execute('''
     	DELETE FROM codes WHERE domain=? AND checktype=?''',
     	(domain, check_type))
-    c.commit()
+    conn.commit()
     conn.close()
 

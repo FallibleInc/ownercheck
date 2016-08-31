@@ -1,2 +1,4 @@
 requests
 dnspython
+pytest
+responses

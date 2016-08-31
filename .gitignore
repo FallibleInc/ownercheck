@@ -2,4 +2,5 @@
 *.db
 *.pyc
 *.egg-info*
-
+*.cache/
+__pycache__*
