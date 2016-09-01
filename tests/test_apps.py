@@ -1,7 +1,8 @@
+import io
 import re
 import responses
 from ownercheck.apps import verify_app, fetch_apps
-from conf import IOS_URL, ANDROID_URL, WEB_URL
+from .conf import IOS_URL, ANDROID_URL, WEB_URL
 
 
 @responses.activate
@@ -9,7 +10,7 @@ def test_fetch_apps():
 
 	responses.add(responses.GET,
 				  WEB_URL,
-                  body=open('tests/data/snapchat.web.html').read(),
+                  body=io.open('tests/data/snapchat.web.html', encoding='utf-8').read(),
                   status=200,
                   content_type='text/html')
 	assert len(fetch_apps(WEB_URL)) == 2
@@ -22,13 +23,13 @@ def test_fetch_apps():
 def test_verify_app():
 	responses.add(responses.GET,
 				  ANDROID_URL,
-                  body=open('tests/data/twitter.android.html').read(),
+                  body=io.open('tests/data/twitter.android.html', encoding='utf-8').read(),
                   status=200,
                   content_type='text/html',
                   match_querystring=True)
 	responses.add(responses.GET,
 				  IOS_URL,
-                  body=open('tests/data/twitter.ios.html').read(),
+                  body=io.open('tests/data/twitter.ios.html', encoding='utf-8').read(),
                   status=200,
                   content_type='text/html',
                   match_querystring=True)

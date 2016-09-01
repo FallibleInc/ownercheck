@@ -1,5 +1,14 @@
-from HTMLParser import HTMLParser
-import urlparse
+try:
+    from HTMLParser import HTMLParser
+except:
+    from html.parser import HTMLParser
+
+try:
+    from urlparse import urlparse
+except:
+    from urllib.parse import urlparse
+
+
 import requests
 
 
@@ -13,7 +22,7 @@ class MobileAppLinksParser(HTMLParser):
         if tag == 'a':
             for attr in attrs:
                 if attr[0] == 'href':
-                    parsed_url = urlparse.urlparse(attr[1])
+                    parsed_url = urlparse(attr[1])
                     if parsed_url.netloc == 'play.google.com':
                         self.app_links.add((attr[1], 'Android'))
                     elif parsed_url.netloc == 'itunes.apple.com':
@@ -38,7 +47,7 @@ class InvalidAppStoreURL(Exception):
 
 
 def verify_app(appstore_url, domain):
-    parsed_url = urlparse.urlparse(appstore_url)
+    parsed_url = urlparse(appstore_url)
     app_store = None
     if parsed_url.netloc == 'play.google.com':
         app_store = 'Android'
@@ -53,16 +62,16 @@ def verify_app(appstore_url, domain):
 
     for i in parser.links:
         if app_store == 'Android':
-            if urlparse.urlparse(i).netloc == 'www.google.com':
+            if urlparse(i).netloc == 'www.google.com':
                 try:
-                    page_domain = urlparse.urlparse(
-                        urlparse.urlparse(i).query.split('&')[0].split('=')[1]).netloc
+                    page_domain = urlparse(
+                        urlparse(i).query.split('&')[0].split('=')[1]).netloc
                     if page_domain == domain:
                         return True
                 except:
                     pass
         else:
-            if urlparse.urlparse(i).netloc == domain:
+            if urlparse(i).netloc == domain:
                 return True
     return False
 

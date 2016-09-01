@@ -1,11 +1,14 @@
-from HTMLParser import HTMLParser
+try:
+    from HTMLParser import HTMLParser
+except:
+    from html.parser import HTMLParser
 import requests
 import dns.resolver
-import db
-from conf import CHECK_TYPES, CNAME_VALUE, META_TAG_NAME, FAKE_USER_AGENT
+from .db import init, get_code
+from .conf import CHECK_TYPES, CNAME_VALUE, META_TAG_NAME, FAKE_USER_AGENT
 
 
-db.init()
+init()
 
 
 class InvalidVerificationType(Exception):
@@ -87,7 +90,7 @@ def _verify_file_exists(domain, filename):
 
 
 def verify_domain(domain, check_type):
-    code = db.get_code(domain, check_type)
+    code = get_code(domain, check_type)
 
     if check_type not in CHECK_TYPES:
         raise InvalidVerificationType(

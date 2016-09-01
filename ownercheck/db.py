@@ -5,7 +5,7 @@ replaced with your own but having the same functionality and interface.
 
 import uuid
 import sqlite3
-from conf import SQLITE_TABLE
+from .conf import SQLITE_TABLE
 
 
 def init():

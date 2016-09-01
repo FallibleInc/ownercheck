@@ -1,5 +1,5 @@
 from ownercheck.db import generate_code, get_code, remove_code
-from conf import TEST_DOMAIN
+from .conf import TEST_DOMAIN
 
 
 def test_generate_code():

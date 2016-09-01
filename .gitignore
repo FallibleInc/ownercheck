@@ -6,4 +6,6 @@
 __pycache__*
 build/*
 dist/*
-
+.tox*
+.venv3*
+.coverage*
