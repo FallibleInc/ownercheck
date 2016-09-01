@@ -8,6 +8,13 @@
 pip install ownercheck
 `
 
+#### Running tests
+
+`
+pip install tox    
+tox
+`
+
 
 #### How to use
 
