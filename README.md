@@ -38,6 +38,16 @@ ownercheck.generate_code('example.com', 'METATAG') # Now proceed to add meta tag
 ownercheck.verify_domain('example.com', 'CNAME') # returns a bool
 ```
 
+
+##### Fetch mobile app links from domain
+
+``` python
+import ownercheck
+
+ownercheck.fetch_apps(domain) # Do not use this for mobile apps verification. A malacious user can link to apps they do not own.
+```
+
+
 ##### Verify ownership of mobile apps on Play/App Store 
 
 ``` python
@@ -48,13 +58,4 @@ domain = '' # Your domain related to the app
 
 ownercheck.verify_app(app_url, domain)
 ```
-
-##### Fetch mobile app links from domain
-
-``` python
-import ownercheck
-
-ownercheck.fetch_apps(domain) # Do not use this for mobile apps verification. A malacious user can link to apps they do not own.
-```
-
 
