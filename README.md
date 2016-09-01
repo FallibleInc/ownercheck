@@ -25,8 +25,9 @@ tox
 ``` python
 import ownercheck
 
-ownercheck.generate_code('http://example.com', 'CNAME') # Now proceed to add a DNS entry for CNAME
-ownercheck.verify_domain('http://example.com', 'CNAME')
+ownercheck.generate_code('example.com', 'CNAME') 
+# Now proceed to add a DNS entry for CNAME
+ownercheck.verify_domain('example.com', 'CNAME')
 ```
 
 ###### User has access to the content hosted on the domain
