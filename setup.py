@@ -6,6 +6,8 @@ setup(
     description='Verify ownership of domain and mobile apps using DNS and other methods',
     author='Fallible',
     author_email='hello@fallible.co',
+    url='https://github.com/FallibleInc/ownercheck',
+    download_url='https://github.com/FallibleInc/ownercheck/tarball/0.1',
     packages=['ownercheck'],
     install_requires=[
         'dnspython',
