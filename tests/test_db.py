@@ -1,6 +1,6 @@
 from ownercheck.db import generate_code, get_code, remove_code
+from conf import TEST_DOMAIN
 
-TEST_DOMAIN = 'google.com'
 
 def test_generate_code():
     assert generate_code(TEST_DOMAIN, 'TXT') != None

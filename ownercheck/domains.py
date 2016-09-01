@@ -2,7 +2,7 @@ from HTMLParser import HTMLParser
 import requests
 import dns.resolver
 import db
-from conf import CHECK_TYPES, CNAME_VALUE, META_TAG_NAME
+from conf import CHECK_TYPES, CNAME_VALUE, META_TAG_NAME, FAKE_USER_AGENT
 
 
 db.init()
@@ -51,24 +51,23 @@ def _verify_txt_record(domain, expected_value):
 
 class MetaTagParser(HTMLParser):
 
-    def __init__(self):
+    def __init__(self, meta_tag_name):
         HTMLParser.__init__(self)
         self.value = None
+        self.tag_name = meta_tag_name
 
     def handle_starttag(self, tag, attrs):
         if tag.lower() == 'meta':
             found_tag = False
-            for attribute in attrs:
-                if attribute[0] == 'name' and attribute[1] == META_TAG_NAME:
-                    found_tag = True
-                if found_tag and attribute[0] == 'content':
-                    self.value = attribute[1]
+            attrs = dict(attrs)
+            if 'name' in attrs and attrs['name'] == self.tag_name:
+                self.value = attrs['content']
 
 
 def _verify_meta_tag(domain, expected_value, tag=META_TAG_NAME):
-    r = requests.get('http://' + domain)
+    r = requests.get('http://' + domain, headers={'User-Agent': FAKE_USER_AGENT})
     text = r.text
-    parser = MetaTagParser()
+    parser = MetaTagParser(tag)
     parser.feed(text)
     if parser.value == expected_value:
         return True
@@ -103,4 +102,4 @@ def verify_domain(domain, check_type):
     elif check_type == 'METATAG':
         return _verify_meta_tag(domain, code)
     elif check_type == 'FILE':
-        _verify_file_exists(domain, code)
+        return _verify_file_exists(domain, code)
