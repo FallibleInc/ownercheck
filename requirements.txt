@@ -1,4 +1,11 @@
-requests
-dnspython
-pytest
-responses
+click==6.6
+cookies==2.2.1
+dnspython==1.14.0
+funcsigs==1.0.2
+mock==2.0.0
+pbr==1.10.0
+py==1.4.31
+pytest==3.0.1
+requests==2.11.1
+responses==0.5.1
+six==1.10.0

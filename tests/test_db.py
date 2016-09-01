@@ -24,3 +24,4 @@ def test_remove_code():
     new_cname_code = generate_code(TEST_DOMAIN, 'CNAME')
     assert file_code != new_file_code
     assert cname_code == new_cname_code
+

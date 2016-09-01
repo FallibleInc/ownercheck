@@ -30,9 +30,9 @@ def generate_code(domain, check_type):
     conn = sqlite3.connect(SQLITE_TABLE)
     c = conn.cursor()
     c.execute('''
-		INSERT INTO codes 
-		VALUES(?, ?, ?)''', 
-		(domain, check_type, uid))
+		INSERT INTO codes
+		VALUES(?, ?, ?)''',
+              (domain, check_type, uid))
     conn.commit()
     conn.close()
     return uid
@@ -42,9 +42,9 @@ def get_code(domain, check_type):
     conn = sqlite3.connect(SQLITE_TABLE)
     c = conn.cursor()
     c.execute('''
-			   SELECT value FROM codes 
+			   SELECT value FROM codes
 			   WHERE domain=? AND checktype=?''',
-              (domain,check_type))
+              (domain, check_type))
     row = c.fetchone()
     if row is not None:
         return row[0]
@@ -57,7 +57,6 @@ def remove_code(domain, check_type):
     c = conn.cursor()
     c.execute('''
     	DELETE FROM codes WHERE domain=? AND checktype=?''',
-    	(domain, check_type))
+              (domain, check_type))
     conn.commit()
     conn.close()
-

@@ -65,7 +65,10 @@ class MetaTagParser(HTMLParser):
 
 
 def _verify_meta_tag(domain, expected_value, tag=META_TAG_NAME):
-    r = requests.get('http://' + domain, headers={'User-Agent': FAKE_USER_AGENT})
+    r = requests.get(
+        'http://' + domain,
+        headers={
+            'User-Agent': FAKE_USER_AGENT})
     text = r.text
     parser = MetaTagParser(tag)
     parser.feed(text)
@@ -95,11 +98,15 @@ def verify_domain(domain, check_type):
             'No verification code found for %s'
             % str((domain, check_type)))
 
+    response = False
+
     if check_type == 'CNAME':
-        return _verify_cname(code)
+        response = _verify_cname(code)
     elif check_type == 'TXT':
-        return _verify_txt_record(domain, code)
+        response = _verify_txt_record(domain, code)
     elif check_type == 'METATAG':
-        return _verify_meta_tag(domain, code)
+        response = _verify_meta_tag(domain, code)
     elif check_type == 'FILE':
-        return _verify_file_exists(domain, code)
+        response = _verify_file_exists(domain, code)
+
+    return response
