@@ -20,7 +20,7 @@ tox
 
 ##### Verify domain ownership
 
-###### You have access to the domain DNS settings
+###### User has access to the domain DNS settings
 
 ``` python
 import ownercheck
@@ -29,7 +29,7 @@ ownercheck.generate_code('http://example.com', 'CNAME') # Now proceed to add a D
 ownercheck.verify_domain('http://example.com', 'CNAME')
 ```
 
-###### You have access to the content hosted on the domain
+###### User has access to the content hosted on the domain
 
 ``` python
 import ownercheck
@@ -38,7 +38,7 @@ ownercheck.generate_code('example.com', 'METATAG') # Now proceed to add meta tag
 ownercheck.verify_domain('example.com', 'CNAME') # returns a bool
 ```
 
-##### Verify mobile apps ownership
+##### Verify ownership of mobile apps on Play/App Store 
 
 ``` python
 import ownercheck
