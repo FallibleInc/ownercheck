@@ -11,11 +11,8 @@ from ownercheck.db import generate_code
 from .conf import TEST_DOMAIN
 
 
-
 def test_verify_cname():
-	p = subprocess.Popen(['host', '-t', 'CNAME', 'developers.google.com'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-	out, err = p.communicate()
-	expected = str(out).split(' ')[-1].strip()
+	expected = 'www3.l.google.com.'
 	if expected.endswith("'"):
 		expected = expected.rstrip("'")
 	if expected.endswith("\\n"):
@@ -26,13 +23,7 @@ def test_verify_cname():
 
 
 def test_verify_txt_record():
-	p = subprocess.Popen(['host', '-t', 'TXT', 'google.com'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-	out, err = p.communicate()
-	expected = None
-	try:
-		expected = str(out).split('"')[-2].strip()
-	except:
-		pass
+	expected =  "v=spf1 include:_spf.google.com ~all"
 	assert _verify_txt_record("google.com", expected) == True
 	assert _verify_txt_record("google.com", str(uuid.uuid4())) == False
 
@@ -67,5 +58,23 @@ def test_verify_file_exists():
 
 def test_verify_domain():
 	pass
+
+
+
+# def expected_cname():
+# 	p = subprocess.Popen(['host', '-t', 'CNAME', 'developers.google.com'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+# 	out, err = p.communicate()
+# 	expected = str(out).split(' ')[-1].strip()
+# 	return expected
+
+# def expected_txt():
+# 	p = subprocess.Popen(['host', '-t', 'TXT', 'google.com'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+# 	out, err = p.communicate()
+# 	expected = None
+# 	try:
+# 		expected = str(out).split('"')[-2].strip()
+# 	except:
+# 		pass
+# 	return expected
 
 
