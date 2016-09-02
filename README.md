@@ -1,5 +1,7 @@
 ### Ownercheck
 
+[![Travis](https://img.shields.io/travis/FallibleInc/ownercheck.svg?maxAge=2592000)](https://github.com/FallibleInc/ownercheck)
+
 `ownercheck` can be used to verify ownership of domains and mobile apps hosted on Android Play store or iOS app store. Domains can be verified by either adding a DNS record (CNAME or a TXT record) or by adding content to the existing website(a meta tag or uploading an empty file with the specified name). Mobile apps can be verified by checking the corresponding app page on app store for mention of user's verified domain in developers section of the page. 
 
 The library uses SQLite to store and match generated verification codes, which can be easily swapped with any database backend you use (check db.py, need to make it configurable later).
