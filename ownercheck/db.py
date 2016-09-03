@@ -8,11 +8,11 @@ import sqlite3
 from .conf import SQLITE_TABLE
 
 
-def init():
+def setup_db():
     conn = sqlite3.connect(SQLITE_TABLE)
-    c = conn.cursor()
+    cursor = conn.cursor()
     try:
-        c.execute('''
+        cursor.execute('''
 			CREATE TABLE codes
              (domain text, checktype text, value text)''')
         conn.commit()
@@ -40,12 +40,12 @@ def generate_code(domain, check_type):
 
 def get_code(domain, check_type):
     conn = sqlite3.connect(SQLITE_TABLE)
-    c = conn.cursor()
-    c.execute('''
+    cursor = conn.cursor()
+    cursor.execute('''
 			   SELECT value FROM codes
 			   WHERE domain=? AND checktype=?''',
-              (domain, check_type))
-    row = c.fetchone()
+                   (domain, check_type))
+    row = cursor.fetchone()
     if row is not None:
         return row[0]
     else:
@@ -54,9 +54,9 @@ def get_code(domain, check_type):
 
 def remove_code(domain, check_type):
     conn = sqlite3.connect(SQLITE_TABLE)
-    c = conn.cursor()
-    c.execute('''
+    cursor = conn.cursor()
+    cursor.execute('''
     	DELETE FROM codes WHERE domain=? AND checktype=?''',
-              (domain, check_type))
+                   (domain, check_type))
     conn.commit()
     conn.close()

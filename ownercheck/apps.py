@@ -1,11 +1,8 @@
 try:
     from HTMLParser import HTMLParser
-except:
-    from html.parser import HTMLParser
-
-try:
     from urlparse import urlparse
-except:
+except ImportError:
+    from html.parser import HTMLParser
     from urllib.parse import urlparse
 
 
@@ -19,14 +16,13 @@ class MobileAppLinksParser(HTMLParser):
         self.app_links = set([])
 
     def handle_starttag(self, tag, attrs):
-        if tag == 'a':
-            for attr in attrs:
-                if attr[0] == 'href':
-                    parsed_url = urlparse(attr[1])
-                    if parsed_url.netloc == 'play.google.com':
-                        self.app_links.add((attr[1], 'Android'))
-                    elif parsed_url.netloc == 'itunes.apple.com':
-                        self.app_links.add((attr[1], 'iOS'))
+        attrs = dict(attrs)
+        if tag == 'a' and 'href' in attrs:
+            parsed_url = urlparse(attrs['href'])
+            if parsed_url.netloc == 'play.google.com':
+                self.app_links.add((attrs['href'], 'Android'))
+            elif parsed_url.netloc == 'itunes.apple.com':
+                self.app_links.add((attrs['href'], 'iOS'))
 
 
 class AllLinksParser(HTMLParser):
@@ -36,10 +32,9 @@ class AllLinksParser(HTMLParser):
         self.links = set([])
 
     def handle_starttag(self, tag, attrs):
-        if tag == 'a':
-            for attr in attrs:
-                if attr[0] == 'href':
-                    self.links.add(attr[1])
+        attrs = dict(attrs)
+        if tag == 'a' and 'href' in attrs:
+            self.links.add(attrs['href'])
 
 
 class InvalidAppStoreURL(Exception):
@@ -61,15 +56,15 @@ def verify_app(appstore_url, domain):
     parser.feed(r.text)
 
     for i in parser.links:
-        if app_store == 'Android':
-            if urlparse(i).netloc == 'www.google.com':
-                try:
-                    page_domain = urlparse(
-                        urlparse(i).query.split('&')[0].split('=')[1]).netloc
-                    if page_domain == domain:
-                        return True
-                except:
-                    pass
+        if app_store == 'Android' and urlparse(i).netloc == 'www.google.com':
+            try:
+                # Google Play store has the developer website as a query param
+                page_domain = urlparse(
+                    urlparse(i).query.split('&')[0].split('=')[1]).netloc
+                if page_domain == domain:
+                    return True
+            except:
+                pass
         else:
             if urlparse(i).netloc == domain:
                 return True

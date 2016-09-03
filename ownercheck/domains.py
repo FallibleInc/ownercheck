@@ -1,14 +1,15 @@
 try:
     from HTMLParser import HTMLParser
-except:
+except ImportError:
     from html.parser import HTMLParser
 import requests
 import dns.resolver
-from .db import init, get_code
+from .db import setup_db, get_code
 from .conf import CHECK_TYPES, CNAME_VALUE, META_TAG_NAME, FAKE_USER_AGENT
 
 
-init()
+# Create db tables if not already created
+setup_db()
 
 
 class InvalidVerificationType(Exception):
@@ -45,14 +46,15 @@ def _verify_txt_record(domain, expected_value):
                 record = record[1:-1]
             if record == expected_value:
                 return True
-    except dns.resolver.NoAnswer:
-        return False
-    except dns.resolver.Timeout:
+    except (dns.resolver.NoAnswer, dns.resolver.Timeout):
         return False
     return False
 
 
 class MetaTagParser(HTMLParser):
+    """
+        Given a meta tag name, saves it's content in value
+    """
 
     def __init__(self, meta_tag_name):
         HTMLParser.__init__(self)
@@ -60,11 +62,9 @@ class MetaTagParser(HTMLParser):
         self.tag_name = meta_tag_name
 
     def handle_starttag(self, tag, attrs):
-        if tag.lower() == 'meta':
-            found_tag = False
-            attrs = dict(attrs)
-            if 'name' in attrs and attrs['name'] == self.tag_name:
-                self.value = attrs['content']
+        attrs = dict(attrs)
+        if tag.lower() == 'meta' and attrs.get('name') == self.tag_name:
+            self.value = attrs['content']
 
 
 def _verify_meta_tag(domain, expected_value, tag=META_TAG_NAME):
@@ -75,18 +75,12 @@ def _verify_meta_tag(domain, expected_value, tag=META_TAG_NAME):
     text = r.text
     parser = MetaTagParser(tag)
     parser.feed(text)
-    if parser.value == expected_value:
-        return True
-    else:
-        return False
+    return bool(parser.value == expected_value)
 
 
 def _verify_file_exists(domain, filename):
     r = requests.get('/'.join(['http:/', domain, filename]))
-    if 200 <= r.status_code < 300:
-        return True
-    else:
-        return False
+    return bool(200 <= r.status_code < 300)
 
 
 def verify_domain(domain, check_type):
