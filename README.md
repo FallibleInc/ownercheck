@@ -39,8 +39,9 @@ ownercheck.verify_domain('example.com', 'CNAME')
 ``` python
 import ownercheck
 
-ownercheck.generate_code('example.com', 'METATAG') # Now proceed to add meta tag in your index.html as directed
-ownercheck.verify_domain('example.com', 'CNAME') # returns a bool
+ownercheck.generate_code('example.com', 'METATAG') 
+# Now proceed to add meta tag in your index.html as directed
+ownercheck.verify_domain('example.com', 'METATAG') # returns a bool
 ```
 
 
@@ -49,7 +50,9 @@ ownercheck.verify_domain('example.com', 'CNAME') # returns a bool
 ``` python
 import ownercheck
 
-ownercheck.fetch_apps(domain) # Do not use this for mobile apps verification. A malacious user can link to apps they do not own.
+ownercheck.fetch_apps(domain) 
+# Do not use this for mobile apps verification. A malacious user can link to apps they do not own.
+# Get all the link to apps on a page and then use ownercheck.verify_app instead.
 ```
 
 
