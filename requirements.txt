@@ -4,7 +4,7 @@ dnspython==1.14.0
 funcsigs==1.0.2
 mock==2.0.0
 pbr==1.10.0
-py==1.4.31
+py==1.10.0
 pytest==3.0.1
 requests==2.11.1
 responses==0.5.1
